@@ -1,0 +1,25 @@
+.side-nav{
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background: #333;
+    overflow-x: hidden;
+    padding-top: 50px;
+    padding-left: 2%;
+}
+
+.side-nav a{
+    padding: 10px;
+    color: #b1b0b0;
+    text-decoration: none;
+    font-size: 22px;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-nav a:hover {
+    color: #fff;
+}
