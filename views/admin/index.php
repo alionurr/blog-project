@@ -1,10 +1,10 @@
 <?php
-require_once(__DIR__ . "/views/admin/header.php");
+require_once(__DIR__ . "/header.php");
 //print_r($_SESSION);
 ?>
 
     <body>
-    <?php require_once(__DIR__ . "/views/admin/sidebar.php");?>
+    <?php require_once(__DIR__ . "/sidebar.php");?>
 
     <div class="container" style="margin-top:50px;">
 <!--            <h1>Welcome, Admin <span class="text-uppercase">--><?//= $_SESSION['name'] ?><!--</span></h1>-->
@@ -150,5 +150,5 @@ require_once(__DIR__ . "/views/admin/header.php");
     </body>
 
 <?php
-require_once(__DIR__ . "/views/admin/footer.php");
+require_once(__DIR__ . "/footer.php");
 ?>

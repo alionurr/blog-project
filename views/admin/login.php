@@ -3,7 +3,7 @@ require_once("header.php");
 
 if(isset($_SESSION['name']))
 {
-    Header('Location:/index.php');
+    Header('Location:index.php');
 }
 
 ?>

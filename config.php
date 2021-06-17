@@ -5,7 +5,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "root";
-
+const ROOT = __DIR__;
 try {
     $conn = new PDO("mysql:host=$servername;dbname=Blog_Project", $username, $password);
 } catch(PDOException $e) {
@@ -25,6 +25,9 @@ if(strpos($requestUri, '/views/admin') === 0 && !in_array($requestUri, ['/views/
         Header("Location:/views/admin/login.php");
     }
 }
+
+$numperpage = 9;
+
 
 //$a = $_SERVER;
 

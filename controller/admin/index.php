@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../../config.php';
+require_once __DIR__.'/../../Slugger.php';
 
 /*
  ********** ADMIN LOGIN **********
@@ -13,7 +14,7 @@ if (isset($_POST['adminLogin']))
     if (empty($_POST['email']) || empty($_POST['password'])) {
         header('location:../../views/admin/login.php?status=wrong');
     } else {
-        $user = $conn->prepare("SELECT * FROM user WHERE email = :email");
+        $user = $conn->prepare("SELECT * FROM admin_user WHERE email = :email");
         $user->execute(array(
             'email' => $email,
         ));
@@ -22,7 +23,7 @@ if (isset($_POST['adminLogin']))
             if ($password == $user_data['password']) {
 
                 $_SESSION["name"] = $user_data['name'];
-                Header("Location:../../index.php");
+                Header("Location:../../views/admin/index.php");
             } else {
                 Header("Location:../../views/admin/login.php");
             }
@@ -33,52 +34,74 @@ if (isset($_POST['adminLogin']))
 }
 
 
+
+/*
+ ********** LOG OUT **********
+ */
+
+if(isset($_POST['logout']))
+{
+    UNSET($_SESSION['name']);
+    Header('Location: ../../views/admin/index.php');
+}
+
+
+
+
 /*
  ********** ADD POST **********
  */
 
 if (isset($_POST['addPost']))
 {
+//    var_dump(__DIR__);
 
-//    var_dump($_POST['category']);
-//    exit();
     $data = [
         'title' => htmlspecialchars($_POST['title']),
         'excerpt' => htmlspecialchars($_POST['excerpt']),
         'content' => htmlspecialchars($_POST['content']),
         'author' => $_SESSION['name'],
+        'image' => $_FILES['image']['name'],
         'status' => 'pending',
     ];
+    $targetDirection = ROOT."/resources/img/uploaded/".$_FILES['image']['name'];
 
-
-
-    $sql = "INSERT INTO blog (title, content, author, excerpt, status) VALUES (:title, :content, :author, :excerpt, :status)";
-    $post = $conn->prepare($sql);
-    $post->execute($data);
-    $blog_id = $conn->lastInsertId();
-
-//    $category = $conn->prepare("INSERT INTO blog_category (blog_id, category_id) VALUES ($id, :category_id)");
-
-    $categories = $_POST['category'];
-    $category = $conn->prepare("INSERT INTO blog_category (blog_id, category_id) VALUES (:blog_id, :category_id)");
-    foreach ($categories as $c)
+    if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetDirection))
     {
-
-        $category->execute([
-            'blog_id' => $blog_id,
-            'category_id' => $c,
-        ]);
+        Header("Location: ../../views/admin/add_post.php?status=error");
     }
+    else
+    {
+        $sql = "INSERT INTO blog (title, content, author, excerpt, image, status) VALUES (:title, :content, :author, :excerpt, :image, :status)";
+        $post = $conn->prepare($sql);
+        $post->execute($data);
+        $blog_id = $conn->lastInsertId();
 
-//    $data2 = [
-//        'cat_name' => htmlspecialchars($_POST['category'])
-//    ];
-//
-//    $sql2 = "INSERT INTO category (name) VALUE (:cat_name)";
-//    $post2 = $conn->prepare($sql2);
-//    $post2->execute($data2);
+        $categories = $_POST['category'];
+        $category = $conn->prepare("INSERT INTO blog_category (blog_id, category_id) VALUES (:blog_id, :category_id)");
+        foreach ($categories as $c)
+        {
 
-    Header("Location: ../../index.php");
+            $category->execute([
+                'blog_id' => $blog_id,
+                'category_id' => $c,
+            ]);
+        }
+
+        $tags = $_POST['tag'];
+        $tag = $conn->prepare("INSERT INTO blog_tag SET blog_id=:blog_id, tag_id=:tag_id");
+    //    print_r($tags);
+    //    exit();
+        foreach ($tags as $t) {
+    //        print_r($t);
+    //        exit();
+            $tag->execute([
+                'blog_id' => $blog_id,
+                'tag_id' => $t
+            ]);
+        }
+        Header("Location: ../../views/admin/index.php");
+    }
 }
 
 
@@ -160,7 +183,42 @@ if (isset($_POST['updatePost']))
             ]);
         }
 
-        Header("Location: ../../index.php");
+
+        $tagQuery = $conn->prepare("SELECT tag_id FROM blog_tag AS bt INNER JOIN blog AS b ON b.id=bt.blog_id WHERE b.id=:id");
+        $tagQuery->execute(['id' => $id]);
+        $tags = $tagQuery->fetchAll(PDO::FETCH_ASSOC);
+
+//        print_r($tags);exit();
+
+        $t = array_map(function ($tag){
+            return $tag['tag_id'];
+        }, $tags);
+
+        $post_tags = $_POST['tag'];
+
+        $deleteTagDiff = array_diff($t, $post_tags);
+
+        $deleteTagQuery = $conn->prepare("DELETE FROM blog_tag WHERE blog_id=:blog_id AND tag_id=:tag_id");
+        foreach ($deleteTagDiff as $item) {
+            $deleteTagQuery->execute([
+                'blog_id' => $id,
+                'tag_id' => $item
+            ]);
+        }
+
+        $addTagDiff = array_diff($post_tags, $t);
+
+        $addTagQuery = $conn->prepare("INSERT INTO blog_tag SET blog_id=:blog_id, tag_id=:tag_id");
+        foreach ($addTagDiff as $item) {
+            $addTagQuery->execute([
+                'blog_id' => $id,
+                'tag_id' => $item
+            ]);
+        }
+
+
+
+        Header("Location: ../../views/admin/index.php");
     }
 }
 
@@ -176,7 +234,7 @@ if (isset($_POST['deleteButton']))
     $post = $conn->prepare($sql);
     $post->execute([$id]);
 
-    Header("Location: ../../index.php");
+    Header("Location: ../../views/admin/index.php");
 }
 
 
@@ -190,25 +248,33 @@ if (isset($_POST['addCategory']))
 //    echo "selamın aleykum dayıoglu";
     $c_name = htmlspecialchars($_POST['category_name']);
 //    echo $c_name;
+    ;
 
-    $query = $conn->prepare("INSERT INTO category SET name=:c_name");
-    $query->execute(['c_name' => $c_name]);
 
-    Header('Location:../../index.php');
+    $query = $conn->prepare("INSERT INTO category(name, slug) VALUES(:c_name, :c_slug)");
+    $query->execute(['c_name' => $c_name, 'c_slug' => Slugger::createSlug($c_name)]);
+
+    Header('Location:../../views/admin/index.php');
 }
 
 
 
 /*
- ********** LOG OUT **********
+ ********** ADD A NEW TAG **********
  */
 
-if(isset($_POST['logout']))
+if (isset($_POST['addTag']))
 {
-    session_destroy();
-    Header('Location: ../../index.php');
-}
+    $tag_name = htmlspecialchars($_POST['tag_name']);
 
+//    print_r($tag_name);
+//    exit();
+    $tag = $conn->prepare("INSERT INTO tag(name) VALUES (:tag_name)");
+    $tag->execute(['tag_name' => $tag_name]);
+
+    Header('Location:../../views/admin/index.php');
+
+}
 
 
 

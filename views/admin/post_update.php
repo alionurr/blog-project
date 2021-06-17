@@ -8,8 +8,8 @@
     <?php
         $id = $_GET['id'];
 
-        $post = $conn->prepare("SELECT * FROM blog WHERE id='$id'");
-        $post->execute();
+        $post = $conn->prepare("SELECT * FROM blog WHERE id=:id");
+        $post->execute(['id' => $id]);
 
         if ($p = $post->fetch(PDO::FETCH_ASSOC))
         {
@@ -40,29 +40,75 @@
             <textarea type="text" class="form-control" style="height: 200px" name="content" id="content" placeholder="You can write your article."><?php echo $content; ?></textarea>
         </div>
 
-        <select class="js-example-basic-multiple" style="width: 100%" name="category[]" multiple="multiple">
-            <?php
 
-            $category = $conn->prepare("SELECT * FROM category");
-            $category->execute();
+        <div>
+            <label for="category">Select Category</label>
+            <select class="js-example-basic-multiple" style="width: 100%" name="category[]" multiple="multiple">
+                <?php
 
-            if ($results = $category->fetchAll(PDO::FETCH_ASSOC))
-            {
-//                    print_r($result);
-                foreach ($results as $result)
-                {
-                    $id = $result['id'];
-                    $name = $result['name'];
+                $category = $conn->prepare("SELECT * FROM category");
+                $category->execute();
 
-                    ?>
-
-                    <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
-
-                    <?php
+                $a = "SELECT DISTINCT(c.id) FROM category AS c INNER JOIN blog_category AS bc ON bc.category_id=c.id WHERE bc.blog_id=:id";
+                $selectedCategoryQuery = $conn->prepare($a);
+                $selectedCategoryQuery->execute(['id' => $id]);
+                $selectedCategories = [];
+                foreach ($selectedCategoryQuery->fetchAll() as $selectedCategory){
+                    $selectedCategories[] = $selectedCategory['id'];
                 }
-            }
-            ?>
-        </select>
+
+                if ($results = $category->fetchAll(PDO::FETCH_ASSOC))
+                {
+    //                    print_r($result);
+                    foreach ($results as $result)
+                    {
+                        $cat_id = $result['id'];
+                        $name = $result['name'];
+
+                        ?>
+
+                        <option value="<?php echo $cat_id; ?>" <?php if(in_array($cat_id, $selectedCategories)) echo "selected";?>><?php echo $name; ?></option>
+
+                        <?php
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+
+        <div class="mt-3">
+            <label for="tag">Select Tag</label>
+            <select class="js-example-basic-multiple" style="width: 100%" name="tag[]" multiple="multiple">
+
+                <?php
+                    $tag = $conn->prepare("SELECT * FROM tag");
+                    $tag->execute();
+
+                    $selectedTag = $conn->prepare("SELECT t.id FROM tag AS t INNER JOIN blog_tag AS bt ON bt.tag_id=t.id WHERE bt.blog_id=:id");
+                    $selectedTag->execute(['id' => $id]);
+
+                    $selectedTags = [];
+                    foreach ($selectedTag->fetchAll(PDO::FETCH_ASSOC) as $selected_tag) {
+                        $selectedTags[] = $selected_tag['id'];
+                    }
+
+                    if ($results = $tag->fetchAll(PDO::FETCH_ASSOC))
+                    {
+                        foreach ($results as $result) {
+                            $tag_id = $result['id'];
+                            $tag_name = $result['name'];
+
+                ?>
+                            <option value="<?php echo $tag_id ?>" <?php if(in_array($tag_id, $selectedTags)) echo "selected";?>><?php echo $tag_name?></option>
+                <?php
+                        }
+                    }
+                ?>
+
+            </select>
+        </div>
+
 
         <div class="col-sm" style="margin-top: 10px;">
             <?php if(isset($_GET['blanks'])): ?>
@@ -75,7 +121,11 @@
         <button type="submit" name="updatePost" class="btn btn-primary btn-block mt-5">Update Post</button>
     </form>
 </div>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+    });
+</script>
 </body>
 
 <?php require_once("footer.php"); ?>

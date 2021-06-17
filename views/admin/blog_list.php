@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config.php';
 
-$sql = "SELECT b.*, COUNT(c.name) AS category FROM blog_category AS bc LEFT JOIN category AS c ON c.id = bc.category_id LEFT JOIN blog AS b ON b.id = bc.blog_id GROUP BY bc.blog_id";
+    $sql = "SELECT b.*, COUNT(c.name) AS category FROM blog_category AS bc INNER JOIN category AS c ON c.id = bc.category_id INNER JOIN blog AS b ON b.id = bc.blog_id GROUP BY bc.blog_id";
 //$ex = "SELECT
 //                b.*
 //            FROM
