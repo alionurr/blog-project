@@ -14,6 +14,8 @@
             $excerpt = $postDetail['excerpt'];
             $content = $postDetail['content'];
             $author = $postDetail['author'];
+            $image = $postDetail['image'];
+//            var_dump($postDetail);exit();
         }
     ?>
     <div class="container">
@@ -22,6 +24,7 @@
                 Featured
             </div>
             <div class="card-body">
+                <img src="<?='/resources/img/uploaded/'.$image; ?>" alt="image does not exists">
                 <h5 class="card-title"><?php echo $title; ?></h5>
                 <p class="card-text"><?php echo $content; ?></p>
         <!--        <a href="#" class="btn btn-primary">Go somewhere</a>-->

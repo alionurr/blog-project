@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/../../config.php';
 require_once __DIR__.'/../../Slugger.php';
+require_once __DIR__.'/../../FileUpload.php';
 
 /*
  ********** ADMIN LOGIN **********
@@ -61,17 +62,18 @@ if (isset($_POST['addPost']))
         'excerpt' => htmlspecialchars($_POST['excerpt']),
         'content' => htmlspecialchars($_POST['content']),
         'author' => $_SESSION['name'],
-        'image' => $_FILES['image']['name'],
         'status' => 'pending',
     ];
-    $targetDirection = ROOT."/resources/img/uploaded/".$_FILES['image']['name'];
 
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetDirection))
+    $photoDirection = ROOT."/resources/img/uploaded/";
+    $upload = FileUpload::upload($_FILES['image'], $photoDirection);
+    if (!$upload)
     {
         Header("Location: ../../views/admin/add_post.php?status=error");
     }
     else
     {
+        $data["image"] = $upload;
         $sql = "INSERT INTO blog (title, content, author, excerpt, image, status) VALUES (:title, :content, :author, :excerpt, :image, :status)";
         $post = $conn->prepare($sql);
         $post->execute($data);
@@ -125,7 +127,25 @@ if (isset($_POST['updatePost']))
             'content' => htmlspecialchars($_POST['content']),
         ];
 
-        $sql = "UPDATE blog SET title=:title, excerpt=:excerpt, content=:content WHERE id=:id";
+        $q = $conn->prepare("SELECT image FROM blog WHERE id=:id");
+        $q->execute(['id' => $id]);
+        $imageName = $q->fetch(PDO::FETCH_COLUMN);
+
+//        var_dump($imageName);exit();
+        $photoDirection = ROOT."/resources/img/uploaded/";
+
+
+        if(isset($_FILES['image'])){
+            $imageUpload = FileUpload::upload($_FILES['image'], $photoDirection);
+            if (!$imageUpload)
+            {
+                header('location:../../views/admin/post_update.php?id='.$id.'&status=error');exit();
+            }
+            FileUpload::remove($imageName, $photoDirection);
+        }
+
+        $data['image'] = $imageUpload ?? $imageName;
+        $sql = "UPDATE blog SET title=:title, excerpt=:excerpt, image=:image, content=:content WHERE id=:id";
         $post = $conn->prepare($sql);
         $post->execute($data);
 

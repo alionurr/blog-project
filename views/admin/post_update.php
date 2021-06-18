@@ -3,7 +3,7 @@
 <body>
 <?php require_once("sidebar.php");?>
 
-<div class="container" style="margin-top:50px;">
+<div class="container mb-5" style="margin-top:50px;">
 
     <?php
         $id = $_GET['id'];
@@ -18,12 +18,13 @@
             $title = $p['title'];
             $excerpt = $p['excerpt'];
             $content = $p['content'];
+            $image = $p['image'];
 //            $updated_at = $p['updated_at'];
         }
 
     ?>
 
-    <form action="../../controller/admin/index.php" method="post">
+    <form action="../../controller/admin/index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         <div class="form-row">
             <div class="form-group col-md">
@@ -38,6 +39,12 @@
         <div class="form-group">
             <label for="content">Content</label>
             <textarea type="text" class="form-control" style="height: 200px" name="content" id="content" placeholder="You can write your article."><?php echo $content; ?></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Default file input example</label>
+            <input class="form-control" type="file" name="image" id="formFile">
+            <img src="<?= '/resources/img/uploaded/'.$image ?>"  alt="image does not exists" style="height: 200px;width: 300px;">
         </div>
 
 
