@@ -11,7 +11,7 @@ require_once(__DIR__ . "/header.php");
         <div class="row">
             <div class="col-sm-6">
                 <?php if(isset($_SESSION['name'])): ?>
-                    <form action="/controller/admin/index.php" method="post">
+                    <form action="../../controller/admin/index.php" method="post">
                         <button type="submit" name="logout" class="btn btn-primary">Log out</button>
                     </form>
                 <?php else: ?>
@@ -72,7 +72,7 @@ require_once(__DIR__ . "/header.php");
 <!--                                </button>-->
                             </div>
 
-                            <form action="/controller/admin/index.php" method="post">
+                            <form action="../../controller/admin/index.php" method="post">
                                 <div class="modal-body">
                                     <input type="text" name="tag_name" required>
                                 </div>
@@ -106,46 +106,6 @@ require_once(__DIR__ . "/header.php");
                 </thead>
             </table>
         </div>
-        <!--     --><?php
-        //            $posts = $conn->prepare("SELECT * FROM blog");
-        //            $posts->execute();
-        //            if($posts_result = $posts->fetchAll(PDO::FETCH_ASSOC))
-        //            {
-        ////            print_r($posts_result);
-        //                foreach ($posts_result as $post)
-        //                {
-        //                    $id = $post['id'];
-        //                    $title = $post['title'];
-        //                    $author = $post['author'];
-        //                    $excerpt = $post['excerpt'];
-        //                    $status = $post['status'];
-        ////                    $created_at = $post['created_at'];
-        //
-        //            ?>
-
-        <!--            <div class="card" style="margin-top: 50px; margin-bottom: 50px">-->
-        <!--                <div class="card-header">-->
-        <!--                    <div class="float-right">Author: --><?php //echo $author; ?><!--</div>-->
-        <!--                </div>-->
-        <!--                <div class="card-body">-->
-        <!--                    <h5 class="card-title">--><?php //echo $title; ?><!--</h5>-->
-        <!--                    <p class="card-text">--><?php //echo $excerpt; ?><!--</p>-->
-        <!--                    <div class="row">-->
-        <!--                        <a href="./post_detail.php?id=--><?php //echo $id ?><!--" class="col-sm-2 text-primary">View</a>-->
-        <!--                        <a href="./post_update.php?id=--><?php //echo $id; ?><!--" class="col-sm-2 text-success">Update</a>-->
-        <!--                        <form action="../controller/admin/index.php" method="post">-->
-        <!--                            <input type="hidden" name="id" value="--><?php //echo $id; ?><!--">-->
-        <!--                            <input name="deleteButton" type="submit" value="Delete" style="border: 0; background-color: #fff; color: red;">-->
-        <!--                        </form>-->
-        <!--                   <p class="col-sm-6 text-secondary">Created_at: --><?php ////echo $created_at ?><!--</p>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-
-        <!--                --><?php
-        //                }
-        //            }
-        //        ?>
     </div>
     </body>
 

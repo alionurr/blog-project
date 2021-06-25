@@ -1,4 +1,11 @@
-<?php require_once("header.php"); ?>
+<?php
+    require_once("header.php");
+
+    use Blog\Blog;
+    use Blog\Category;
+    use Blog\Tag;
+
+    ?>
 
 <body>
     <?php require_once("sidebar.php");?>
@@ -39,23 +46,21 @@
                     <select id="category" class="js-example-basic-multiple" style="width: 100%" name="category[]" multiple="multiple">
                         <?php
 
-                            $category = $conn->prepare("SELECT * FROM category");
-                            $category->execute();
+                        /**
+                         * @var Category $categories
+                         */
 
-                            if ($results = $category->fetchAll(PDO::FETCH_ASSOC))
-                            {
-            //                    print_r($result);
-                                foreach ($results as $result)
-                                {
-                                    $id = $result['id'];
-                                    $name = $result['name'];
+                        $categories = $entityManager->getRepository(Category::class)->findAll();
+                        foreach ($categories as $category) {
+                            $categoryId = $category->getId();
+                            $categoryName = $category->getName();
 
                             ?>
 
-                            <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+                            <option value="<?php echo $categoryId; ?>"><?php echo $categoryName; ?></option>
 
-                                    <?php
-                                }
+                        <?php
+
                             }
                             ?>
                     </select>
@@ -71,23 +76,21 @@
 
                     <?php
 
-                        $getTag = $conn->prepare("SELECT * FROM tag");
-                        $getTag->execute();
+                    /**
+                     * @var Tag $tags
+                     */
 
-                        if ($tags = $getTag->fetchAll(PDO::FETCH_ASSOC)) {
-//                            print_r($tags);
-//                            exit();
+                    $tags = $entityManager->getRepository(Tag::class)->findAll();
 
-                            foreach ($tags as $tag) {
-                                $id = $tag['id'];
-                                $name = $tag['name'];
+                    foreach ($tags as $tag) {
+                        $tagId = $tag->getId();
+                        $tagName = $tag->getName();
 
                     ?>
 
-                    <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+                    <option value="<?php echo $tagId; ?>"><?php echo $tagName; ?></option>
 
                     <?php
-                            }
                         }
                     ?>
                 </select>

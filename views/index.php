@@ -1,4 +1,8 @@
-<?php require_once ("header.php"); ?>
+<?php
+    require_once ("header.php");
+    use Blog\Category;
+    use Blog\Blog;
+?>
 
 <body>
 <?php require_once ("navbar.php"); ?>
@@ -10,28 +14,27 @@
         </div>
         <div class="card-body">
             <ul class="list-group">
+
                 <?php
 
-//                    $getCategories = $conn->prepare("SELECT * FROM category");
-//                    $getCategories->execute();
-//                    $categories = $getCategories->fetchAll(PDO::FETCH_ASSOC);
-////                    print_r($categories);exit();
+                $categories = $entityManager->getRepository(Category::class)->findByMostCount();
+//                var_dump($categories);exit();
+//                $categoryArray = [];
+//                foreach ($categories as $category) {
+//                    $categoryArray[] = $category->getName();
+//                }
+//                echo implode(",", $categoryArray);
 
-                    $countArticle = $conn->prepare("SELECT c.name, c.slug, COUNT(b.id) AS count
-                                        FROM `blog` AS b 
-	                                    INNER JOIN blog_category AS bc ON bc.blog_id = b.id
-	                                    INNER JOIN category AS c ON c.id = bc.category_id
-	                                    GROUP BY c.id");
-                    $countArticle->execute();
-                    $categories = $countArticle->fetchAll(PDO::FETCH_ASSOC);
-//                    var_dump($categories);exit();
+                /** @var Category $category */
                 foreach ($categories as $category):
+                    if($category->getBlogs()->count() > 0):
                 ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="/views/category.php?category=<?php echo $category['slug']; ?>"><?php echo $category['name']; ?></a>
-                    <span class="badge badge-primary badge-pill"><?php echo $category['count']; ?></span>
+                    <a href="/views/category.php?category=<?php echo $category->getSlug(); ?>"><?php echo $category->getName(); ?></a>
+                    <span class="badge badge-primary badge-pill"><?php echo $category->getBlogs()->count(); ?></span>
                 </li>
-                <?php endforeach; ?>
+
+                <?php endif;endforeach; ?>
             </ul>
         </div>
     </div>
@@ -44,33 +47,27 @@
             <div class="row">
 
                 <?php
+                $numrecords = $entityManager->getRepository(Blog::class)->getTotalCountByParams();
 
-                $sql = $conn->prepare("SELECT COUNT(id) FROM blog");
-                $sql->execute();
-                $row = $sql->fetch();
-//                echo "Total records ".$row[0];
-                $numrecords = $row[0];
                 $numlinks = ceil($numrecords/$numperpage);
 //                echo "number of page is ".$numlinks;
                 $page = $_GET['start'] ?? 0;
                 $start = $page * $numperpage;
 
-
-                $blog = $conn->prepare("SELECT * FROM blog limit $start, $numperpage");
-                $blog->execute();
-                $blogs = $blog->fetchAll(PDO::FETCH_ASSOC);
+                $blogs = $entityManager->getRepository(\Blog\Blog::class)->findByPaginationParam($start, $numperpage);
 //                print_r($blogs);exit();
 
-                foreach ($blogs as $b):
+                /** @var Blog $blog */
+                foreach ($blogs as $blog):
                 ?>
 
                 <div class="col-sm-4 mb-5">
                     <div class="card">
-                        <h5 class="card-header"><?php echo $b['title']; ?></h5>
+                        <h5 class="card-header"><?php echo $blog->getTitle(); ?></h5>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $b['title']; ?></h5>
-                            <p class="card-text"><?php echo $b['excerpt']; ?></p>
-                            <a href="/views/post_detail.php?id=<?php echo $b['id']; ?>" class="btn btn-primary">Read More</a>
+                            <h5 class="card-title"><?php echo $blog->getTitle(); ?></h5>
+                            <p class="card-text"><?php echo $blog->getExcerpt(); ?></p>
+                            <a href="/views/post_detail.php?id=<?php echo $blog->getId(); ?>" class="btn btn-primary">Read More</a>
                         </div>
                     </div>
                 </div>
