@@ -1,5 +1,9 @@
 <?php
 require_once("header.php");
+
+use Blog\Blog;
+use Blog\Category;
+use Blog\Tag;
 //print_r($_SESSION);
 ?>
 
@@ -11,55 +15,49 @@ require_once("header.php");
         <?php
         $id = $_GET['id'];
 
-        $post = $conn->prepare("SELECT b.*, GROUP_CONCAT(DISTINCT (c.name))  AS category, GROUP_CONCAT(DISTINCT (t.name)) AS tag
-                                        FROM blog_category AS bc 
-                                        INNER JOIN category AS c ON c.id = bc.category_id 
-                                        INNER JOIN blog AS b ON b.id = bc.blog_id 
-                                        LEFT JOIN blog_tag AS bt ON bt.blog_id = b.id
-                                        LEFT JOIN tag AS t ON t.id = bt.tag_id 
-                                        WHERE b.id=:id GROUP BY bc.blog_id");
-        $post->execute(['id' => $id]);
-        if($p = $post->fetch(PDO::FETCH_ASSOC))
-        {
+        /**
+         * @var Blog $blogDetail
+         */
+        $blogDetail = $entityManager->getRepository(Blog::class)->find($id);
 
-                $id = $p['id'];
-                $title = $p['title'];
-                $content = $p['content'];
-                $author = $p['author'];
-                $excerpt = $p['excerpt'];
-                $image = $p['image'];
-                $status = $p['status'];
-                $created_at = $p['created_at'];
-                $category = $p['category'];
-                $tag = $p['tag'];
-//            print_r($p);
-//            exit();
-                ?>
+        $categoryNames = [];
+        $tagNames = [];
+
+        /** @var Category $category */
+        /** @var Tag $tag */
+
+        foreach ($blogDetail->getCategories() as $category){
+            $categoryNames[] = $category->getName();
+        }
+        foreach ($blogDetail->getTags() as $tag) {
+            $tagNames[] = $tag->getName();
+        }
+        ?>
             <div class="card">
                 <div class="row">
                     <div class="col-sm-6 text-center">
-                        <img src="<?php echo "/resources/img/uploaded/".$image; ?>" alt="image does not exists" style="height: 250px; width: 250px;">
+                        <img src="<?php echo "/resources/img/uploaded/".$blogDetail->getImage(); ?>" alt="image does not exists" style="height: 250px; width: 250px;">
                     </div>
                     <div class="col-sm-6">
                         <div class="card-header">
                             <div class="float-right">
                                 <div class="d-inline-block">
-                                    Author: <?php echo $author; ?>
+                                    Author: <?php echo $blogDetail->getAuthor(); ?>
                                 </div>
                                 <div class="d-inline-block ml-3 text-secondary">
-                                    Created_at: <?php echo $created_at ?>
+                                    Created_at: <?php ?>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $title; ?></h5>
-                            <p class="card-text"><?php echo $content; ?></p>
-                            <p class="card-text"><?php echo $category; ?></p>
-                            <p class="card-text"><?php echo $tag; ?></p>
+                            <h5 class="card-title"><?php echo $blogDetail->getTitle(); ?></h5>
+                            <p class="card-text"><?php echo $blogDetail->getContent(); ?></p>
+                            <p class="card-text"><?php echo implode(", ",$categoryNames); ?></p>
+                            <p class="card-text"><?php echo implode(", ",$tagNames) ?></p>
                             <div class="row">
-                                <a href="post_update.php?id=<?php echo $id; ?>" class="btn btn-success mr-2">Update</a>
+                                <a href="post_update.php?id=<?php echo $blogDetail->getId(); ?>" class="btn btn-success mr-2">Update</a>
                                 <form action="../../controller/admin/index.php" method="post">
-                                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                    <input type="hidden" name="id" value="<?php echo $blogDetail->getId(); ?>">
                                     <input name="deleteButton" type="submit" class="btn btn-danger" value="Delete">
                                 </form>
                             </div>
@@ -67,12 +65,6 @@ require_once("header.php");
                     </div>
                 </div>
             </div>
-
-
-
-                <?php
-        }
-        ?>
     </div>
 </body>
 

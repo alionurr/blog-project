@@ -34,29 +34,9 @@ $(document).ready( function () {
                                 <button type="submit" class="btn btn-sm btn-danger" name="deleteButton">Delete</button>
                             </form>                  
                             </div>   
-
-`;
+                    `;
                 }
             },
         ]
-        // buttons: [
-        //     {
-        //         'text' : 'copy',
-        //     }
-        // ]
     });
-
-
-
-    // $.ajax({
-    //     type: "POST",
-    //     url: `${url}/views/blog_list.php`,
-    //     success: function (result) {
-    //         // console.log(result)
-    //         for (const row of result) {
-    //             document.querySelector("#test").innerHTML +=`<tr><td>${row.id}</td><td>${row.title}</td></tr>`;
-    //         }
-    //      },
-    //     dataType: "json"
-    // });
-} );
+});

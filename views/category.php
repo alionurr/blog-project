@@ -6,20 +6,16 @@
     <content>
         <div class="container">
             <?php
-            $category = $_GET['category'];
+            $categorySlug = $_GET['category'];
 //            print_r($category);exit();
+            /** @var \Blog\Category $categoryEntity */
+            $categoryEntity = $entityManager->getRepository(\Blog\Category::class)->findOneBy(['slug' => $categorySlug]);
 
-            $categoryArticlesQuery = "SELECT b.* 
-                                        FROM `blog` AS b 
-	                                    INNER JOIN blog_category AS bc ON bc.blog_id = b.id
-	                                    INNER JOIN category AS c ON c.id = bc.category_id 
-                                        WHERE c.slug='".$category."'    
-                                        GROUP BY b.id";
-            $article = $conn->prepare($categoryArticlesQuery);
-            $article->execute();
-            foreach ($article->fetchAll() as $item){
-                print_r($item);Exit;
+            /** @var \Blog\Blog $blog */
+            foreach ($categoryEntity->getBlogs() as $blog){
+                var_export($blog->getTitle());
             }
+
 //            $post = $conn->prepare("SELECT * FROM blog WHERE id=:id");
 //            $post->execute(['id' => $id]);
 //            if ($postDetail = $post->fetch(PDO::FETCH_ASSOC))

@@ -3,6 +3,15 @@
 require_once __DIR__.'/../../config.php';
 require_once __DIR__.'/../../Slugger.php';
 require_once __DIR__.'/../../FileUpload.php';
+//require_once __DIR__.'/../../src/Product.php';
+
+use Blog\AdminUser;
+use Blog\Blog;
+use Blog\Category;
+use Blog\BlogCategory;
+use Blog\Tag;
+use Blog\BlogTag;
+
 
 /*
  ********** ADMIN LOGIN **********
@@ -14,27 +23,26 @@ if (isset($_POST['adminLogin']))
 
     if (empty($_POST['email']) || empty($_POST['password'])) {
         header('location:../../views/admin/login.php?status=wrong');
-    } else {
-        $user = $conn->prepare("SELECT * FROM admin_user WHERE email = :email");
-        $user->execute(array(
-            'email' => $email,
-        ));
-        if ($user_data = $user->fetch(PDO::FETCH_ASSOC)) {
-//            print_r($user_data);
-            if ($password == $user_data['password']) {
+    }
+    else
+    {
+        $adminUserRepository = $entityManager->getRepository(AdminUser::class);
+        $adminUser = $adminUserRepository->findOneBy(['email' => $email]);
+//        var_dump($admin_user->getPassword());
+//        var_dump($password);
+//        exit();
+        if ($adminUser && password_verify($password, $adminUser->getPassword()))
+        {
+            $_SESSION['name'] = $adminUser->getName();
+            Header('Location:../../views/admin/index.php');
+        }
+        else
+        {
+            Header('Location:../views/admin/login.php');
 
-                $_SESSION["name"] = $user_data['name'];
-                Header("Location:../../views/admin/index.php");
-            } else {
-                Header("Location:../../views/admin/login.php");
-            }
-        } else {
-            Header("Location:../../views/admin/login.php");
         }
     }
 }
-
-
 
 /*
  ********** LOG OUT **********
@@ -45,8 +53,6 @@ if(isset($_POST['logout']))
     UNSET($_SESSION['name']);
     Header('Location: ../../views/admin/index.php');
 }
-
-
 
 
 /*
@@ -74,34 +80,33 @@ if (isset($_POST['addPost']))
     else
     {
         $data["image"] = $upload;
-        $sql = "INSERT INTO blog (title, content, author, excerpt, image, status) VALUES (:title, :content, :author, :excerpt, :image, :status)";
-        $post = $conn->prepare($sql);
-        $post->execute($data);
-        $blog_id = $conn->lastInsertId();
+
+        $blog = new Blog();
+        $blog->setTitle($data['title']);
+        $blog->setExcerpt($data['excerpt']);
+        $blog->setContent($data['content']);
+        $blog->setAuthor($data['author']);
+        $blog->setStatus($data['status']);
+        $blog->setImage($data['image']);
+        $blog->setCreatedAt(new \DateTime());
+        $blog->setUpdatedAt(new \DateTime());
+
 
         $categories = $_POST['category'];
-        $category = $conn->prepare("INSERT INTO blog_category (blog_id, category_id) VALUES (:blog_id, :category_id)");
-        foreach ($categories as $c)
-        {
-
-            $category->execute([
-                'blog_id' => $blog_id,
-                'category_id' => $c,
-            ]);
+        $categoryEntities = $entityManager->getRepository(Category::class)->findById($categories);
+        foreach ($categoryEntities as $categoryEntity){
+            $blog->addCategory($categoryEntity);
         }
 
         $tags = $_POST['tag'];
-        $tag = $conn->prepare("INSERT INTO blog_tag SET blog_id=:blog_id, tag_id=:tag_id");
-    //    print_r($tags);
-    //    exit();
-        foreach ($tags as $t) {
-    //        print_r($t);
-    //        exit();
-            $tag->execute([
-                'blog_id' => $blog_id,
-                'tag_id' => $t
-            ]);
+        $tagEntities = $entityManager->getRepository(Tag::class)->findById($tags);
+        foreach ($tagEntities as $tagEntity) {
+            $blog->addTag($tagEntity);
         }
+
+        $entityManager->persist($blog);
+        $entityManager->flush($blog);
+
         Header("Location: ../../views/admin/index.php");
     }
 }
@@ -127,11 +132,17 @@ if (isset($_POST['updatePost']))
             'content' => htmlspecialchars($_POST['content']),
         ];
 
-        $q = $conn->prepare("SELECT image FROM blog WHERE id=:id");
-        $q->execute(['id' => $id]);
-        $imageName = $q->fetch(PDO::FETCH_COLUMN);
 
-//        var_dump($imageName);exit();
+        /**
+         * @var Blog $blog
+         */
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+        $imageName = $blog->getImage();
+
+//        $q = $conn->prepare("SELECT image FROM blog WHERE id=:id");
+//        $q->execute(['id' => $id]);
+//        $imageName = $q->fetch(PDO::FETCH_COLUMN);
+
         $photoDirection = ROOT."/resources/img/uploaded/";
 
 
@@ -145,98 +156,53 @@ if (isset($_POST['updatePost']))
         }
 
         $data['image'] = $imageUpload ?? $imageName;
-        $sql = "UPDATE blog SET title=:title, excerpt=:excerpt, image=:image, content=:content WHERE id=:id";
-        $post = $conn->prepare($sql);
-        $post->execute($data);
-
-        $query = $conn->prepare("SELECT category_id FROM blog_category AS bc INNER JOIN blog AS b ON b.id=bc.blog_id WHERE b.id=:id");
-        $query->execute(array('id' => $id));
-        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        // make one-dimensional $categories
-        $c =  array_map(function ($category){
-            return $category['category_id'];
-        }, $categories);
-//        print_r( $c);
-//        $new_array = array();
-//        foreach($categories as $array)
-//        {
-//            foreach($array as $val)
-//            {
-//                array_push($new_array, $val);
-//            }
-//        }
-//        print_r($new_array);
+//        $sql = "UPDATE blog SET title=:title, excerpt=:excerpt, image=:image, content=:content WHERE id=:id";
+//        $post = $conn->prepare($sql);
+//        $post->execute($data);
 
 
-//        print_r($categories);
-//        exit();
+        $blog->setTitle($data['title']);
+        $blog->setExcerpt($data['excerpt']);
+        $blog->setContent($data['content']);
+        $blog->setImage($data['image']);
+
+        $postCategories = $_POST['category'];
+
+        /**
+         * @var Category $categories
+         */
+        $categories = $entityManager->getRepository(Category::class)->findById($postCategories);
 
 
-        $post_categories = $_POST['category'];
-//        print_r($post_categories) ;
-//        exit();
-
-        $result = array_diff($c,$post_categories);
-//        print_r($result);
-//        exit();
-
-
-        $query = $conn->prepare("DELETE FROM blog_category WHERE blog_id=:blog_id AND category_id=:category_id");
-
-        foreach ($result as $item) {
-            $query->execute([
-                'blog_id' => $id,
-                'category_id' => $item,
-            ]);
+        foreach ($blog->getCategories() as $blogCategory){
+            if(!in_array($blogCategory->getId(), $postCategories)){
+                $blog->removeCategory($blogCategory);
+            }
         }
 
-
-        $result2 = array_diff($post_categories,$c);
-//        print_r($result2);
-//        exit();
-        $query2 = $conn->prepare("INSERT INTO blog_category SET blog_id=:blog_id, category_id=:category_id");
-        foreach ($result2 as $item) {
-            $query2->execute([
-                'blog_id' => $id,
-                'category_id' => $item,
-            ]);
+        foreach ($categories as $category) {
+            $blog->addCategory($category);
         }
 
+        $postTags = $_POST['tag'];
 
-        $tagQuery = $conn->prepare("SELECT tag_id FROM blog_tag AS bt INNER JOIN blog AS b ON b.id=bt.blog_id WHERE b.id=:id");
-        $tagQuery->execute(['id' => $id]);
-        $tags = $tagQuery->fetchAll(PDO::FETCH_ASSOC);
+        /**
+         * @var Tag $tags
+         */
+        $tags = $entityManager->getRepository(Tag::class)->findById($postTags);
 
-//        print_r($tags);exit();
-
-        $t = array_map(function ($tag){
-            return $tag['tag_id'];
-        }, $tags);
-
-        $post_tags = $_POST['tag'];
-
-        $deleteTagDiff = array_diff($t, $post_tags);
-
-        $deleteTagQuery = $conn->prepare("DELETE FROM blog_tag WHERE blog_id=:blog_id AND tag_id=:tag_id");
-        foreach ($deleteTagDiff as $item) {
-            $deleteTagQuery->execute([
-                'blog_id' => $id,
-                'tag_id' => $item
-            ]);
+        foreach ($blog->getTags() as $blogTag) {
+            if (!in_array($blogTag->getId(), $postTags)){
+                $blog->removeTag($blogTag);
+            }
         }
 
-        $addTagDiff = array_diff($post_tags, $t);
-
-        $addTagQuery = $conn->prepare("INSERT INTO blog_tag SET blog_id=:blog_id, tag_id=:tag_id");
-        foreach ($addTagDiff as $item) {
-            $addTagQuery->execute([
-                'blog_id' => $id,
-                'tag_id' => $item
-            ]);
+        foreach ($tags as $tag) {
+            $blog->addTag($tag);
         }
 
-
+        $entityManager->persist($blog);
+        $entityManager->flush($blog);
 
         Header("Location: ../../views/admin/index.php");
     }
@@ -249,10 +215,11 @@ if (isset($_POST['updatePost']))
 if (isset($_POST['deleteButton']))
 {
     $id = $_POST['id'];
-//    echo $id;
-    $sql = "DELETE FROM blog WHERE id = '$id' ";
-    $post = $conn->prepare($sql);
-    $post->execute([$id]);
+
+    $deleteBlog = $entityManager->getRepository(Blog::class);
+    $delete = $deleteBlog->find($id);
+    $entityManager->remove($delete);
+    $entityManager->flush();
 
     Header("Location: ../../views/admin/index.php");
 }
@@ -265,18 +232,16 @@ if (isset($_POST['deleteButton']))
 
 if (isset($_POST['addCategory']))
 {
-//    echo "selamın aleykum dayıoglu";
-    $c_name = htmlspecialchars($_POST['category_name']);
-//    echo $c_name;
-    ;
+    $categoryName = htmlspecialchars($_POST['category_name']);
 
-
-    $query = $conn->prepare("INSERT INTO category(name, slug) VALUES(:c_name, :c_slug)");
-    $query->execute(['c_name' => $c_name, 'c_slug' => Slugger::createSlug($c_name)]);
+    $category = new Category();
+    $category->setName($categoryName);
+    $category->setSlug(Slugger::createSlug($categoryName));
+    $entityManager->persist($category);
+    $entityManager->flush($category);
 
     Header('Location:../../views/admin/index.php');
 }
-
 
 
 /*
@@ -285,12 +250,12 @@ if (isset($_POST['addCategory']))
 
 if (isset($_POST['addTag']))
 {
-    $tag_name = htmlspecialchars($_POST['tag_name']);
+    $tagName = htmlspecialchars($_POST['tag_name']);
 
-//    print_r($tag_name);
-//    exit();
-    $tag = $conn->prepare("INSERT INTO tag(name) VALUES (:tag_name)");
-    $tag->execute(['tag_name' => $tag_name]);
+    $tag = new Tag();
+    $tag->setName($tagName);
+    $entityManager->persist($tag);
+    $entityManager->flush($tag);
 
     Header('Location:../../views/admin/index.php');
 
