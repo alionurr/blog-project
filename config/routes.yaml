@@ -1,0 +1,29 @@
+/deneme:
+  controller: DefaultController
+  method: indexAction
+
+#
+#/blog/list:
+#    controller: DefaultController
+#    method: indexAction
+#
+#
+#/admin/{slug}:
+#    controller: DefaultController
+#    method: viewAction
+#    params: {
+#      '{slug}': '([0-9a-zA-Z\-]+)'
+#    }
+#
+#
+#/blog/list/{id}/update/{slug}:
+#    controller: DefaultController
+#    method: updateAction
+#    params: {
+#      '{id}': (\d+),
+#      '{slug}': '([0-9a-zA-Z\-]+)$'
+#    }
+
+
+
+
