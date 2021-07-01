@@ -1,7 +1,22 @@
-/deneme:
-  controller: DefaultController
+/admin/dashboard:
+  controller: AdminController
   method: indexAction
 
+/admin/sign-up:
+  controller: AdminController
+  method: signUpAction
+
+/admin/login:
+  controller: AdminController
+  method: loginAction
+
+
+
+
+
+#/deneme:
+#  controller: DefaultController
+#  method: indexAction
 #
 #/blog/list:
 #    controller: DefaultController

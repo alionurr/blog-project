@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use http\Env\Response;
+
 
 class DefaultController extends AbstractController
 {

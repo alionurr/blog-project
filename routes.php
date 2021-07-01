@@ -2,8 +2,10 @@
 
 use Symfony\Component\Yaml\Yaml;
 $routes = Yaml::parse(file_get_contents('config/routes.yaml'));
+$requestUri = $_SERVER["REQUEST_URI"] ?? false;
 
-$requestUri = $_SERVER["REQUEST_URI"];
+//var_dump($_SERVER);
+//exit;
 $controller = 'DefaultController';
 $params = [];
 $method = 'notfoundAction';

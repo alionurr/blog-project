@@ -4,44 +4,37 @@
 namespace App\Controller;
 
 
+use App\Framework\Container;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractController
 {
     /**
-     * @var Request
+     * @var Container
      */
-    protected $request;
+    protected $container;
 
-    /**
-     * @var
-     */
-    protected $entityManager;
-
-    /**
-     * @var
-     */
-    protected $twig;
 
     /**
      * AbstractController constructor.
-     * @param Request $request
-     * @param $entityManager
-     * @param $twig
+     * @param Container $container
      */
-    public function __construct(Request $request, $entityManager, $twig)
+    public function __construct(Container $container)
     {
-        $this->request = $request;
-        $this->entityManager = $entityManager;
-        $this->twig = $twig;
+        $this->container = $container;
     }
 
+    public function get($serviceName)
+    {
+        return $this->container->get($serviceName);
+    }
     /**
      * @return Request
      */
     public function getRequest(): Request
     {
-        return $this->request;
+        return $this->container->get('request');
     }
 
     /**
@@ -49,7 +42,7 @@ abstract class AbstractController
      */
     public function getEntityManager()
     {
-        return $this->entityManager;
+        return $this->container->get('entity_manager');
     }
 
 
