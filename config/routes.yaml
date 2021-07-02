@@ -10,8 +10,13 @@
   controller: AdminController
   method: loginAction
 
+/admin/logout:
+  controller: AdminController
+  method: logoutAction
 
-
+/admin/add-post:
+  controller: AdminController
+  method: addPostAction
 
 
 #/deneme:

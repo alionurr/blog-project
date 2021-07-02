@@ -19,10 +19,11 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                    <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="#!">{{ getName() }}</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <form action="/admin/logout" method="post">
+                        <li><button class="dropdown-item" name="logout" type="submit">Logout</button></li>
+                    </form>
                 </ul>
             </li>
         </ul>
@@ -46,8 +47,8 @@
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="login">Login</a>
-                                <a class="nav-link" href="register">Register</a>
+                                <a class="nav-link" href="/admin/login">Login</a>
+                                <a class="nav-link" href="/admin/sign-up">Register</a>
 {#                                <a class="nav-link" href="password.html">Forgot Password</a>#}
                             </nav>
                         </div>
@@ -68,41 +69,33 @@
                     </ol>
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
-                            <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Primary Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
+                            <a class="card bg-primary text-white mb-4" href="/admin/add-post" style="text-decoration: none">
+                                <div class="card-body">Add Post</div>
+                            </a>
                         </div>
                         <div class="col-xl-3 col-md-6">
-                            <div class="card bg-warning text-white mb-4">
-                                <div class="card-body">Warning Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
+                            <a class="card bg-warning text-white mb-4" href="/admin/add-post" style="text-decoration: none">
+                                <div class="card-body">Add Category</div>
+                            </a>
                         </div>
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-success text-white mb-4">
-                                <div class="card-body">Success Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-danger text-white mb-4">
-                                <div class="card-body">Danger Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
+{#                        <div class="col-xl-3 col-md-6">#}
+{#                            <div class="card bg-success text-white mb-4">#}
+{#                                <div class="card-body">Success Card</div>#}
+{#                                <div class="card-footer d-flex align-items-center justify-content-between">#}
+{#                                    <a class="small text-white stretched-link" href="#">View Details</a>#}
+{#                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-xl-3 col-md-6">#}
+{#                            <div class="card bg-danger text-white mb-4">#}
+{#                                <div class="card-body">Danger Card</div>#}
+{#                                <div class="card-footer d-flex align-items-center justify-content-between">#}
+{#                                    <a class="small text-white stretched-link" href="#">View Details</a>#}
+{#                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
                     </div>
 
                     <div class="card mt-4 mb-4">

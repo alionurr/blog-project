@@ -17,18 +17,28 @@ $isDevMode = true;
 $proxyDir = null;
 $cache = null;
 $useSimpleAnnotationReader = false;
-$config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
+
+$config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src/Entity"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
+
 $conn = Yaml::parse(file_get_contents('config/doctrine.yaml'));
 
 // obtaining the entity manager
 $entityManager = EntityManager::create($conn, $config);
 
-
 $loader = new FilesystemLoader(__DIR__.'/src/templates');
 $twig = new Environment($loader);
-$function = new TwigFunction('getName', function () {
+
+$getName = new TwigFunction('getName', function (){
+    if (isset($_SESSION['adminName'])):
         echo $_SESSION['adminName'];
+    else:
+        echo "logout";
+    endif;
 });
-$twig->addFunction($function);
+
+$twig->addFunction($getName);
+
+//new \App\Service\Twig\TwigService($twig);
+
 
 $request = Request::createFromGlobals();

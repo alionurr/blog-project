@@ -53,4 +53,15 @@ class AdminController extends AbstractController
     }
 
 
+    public function logoutAction()
+    {
+        UNSET($_SESSION['adminName']);
+        return new RedirectResponse("/admin/login");
+    }
+
+
+    public function addPostAction()
+    {
+        echo "asd";
+    }
 }
