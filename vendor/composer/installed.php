@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '4e9875972178d12c3447731c796edc6481a372da',
+        'reference' => 'abef94338e3019cf378bd6163b23467c4f0fc27c',
         'name' => 'alionur/oopblog',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '4e9875972178d12c3447731c796edc6481a372da',
+            'reference' => 'abef94338e3019cf378bd6163b23467c4f0fc27c',
             'dev_requirement' => false,
         ),
         'composer/package-versions-deprecated' => array(

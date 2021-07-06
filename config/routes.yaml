@@ -18,6 +18,13 @@
   controller: AdminController
   method: addPostAction
 
+/admin/add-category:
+  controller: AdminController
+  method: addCategoryAction
+
+#/admin/add-category:
+#  controller: AdminController
+#  method:
 
 #/deneme:
 #  controller: DefaultController

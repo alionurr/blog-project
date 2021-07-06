@@ -74,9 +74,38 @@
                             </a>
                         </div>
                         <div class="col-xl-3 col-md-6">
-                            <a class="card bg-warning text-white mb-4" href="/admin/add-post" style="text-decoration: none">
-                                <div class="card-body">Add Category</div>
-                            </a>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addCategory">
+                                Add Category
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="/admin/add-category" method="post">
+                                            <div class="modal-body">
+                                                <input type="text" name="category" required>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+{#                            <a class="card bg-warning text-white mb-4" href="#" style="text-decoration: none">#}
+{#                                <div class="card-body">Add Category</div>#}
+{#                            </a>#}
                         </div>
 {#                        <div class="col-xl-3 col-md-6">#}
 {#                            <div class="card bg-success text-white mb-4">#}

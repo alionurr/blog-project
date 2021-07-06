@@ -12,6 +12,8 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
+
+
 // Create a simple "default" Doctrine ORM configuration for Annotations
 $isDevMode = true;
 $proxyDir = null;

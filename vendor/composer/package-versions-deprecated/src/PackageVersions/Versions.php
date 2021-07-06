@@ -62,7 +62,7 @@ final class Versions
   'symfony/string' => 'v5.3.3@bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1',
   'symfony/yaml' => 'v5.3.3@485c83a2fb5893e2ff21bf4bfc7fdf48b4967229',
   'twig/twig' => 'v3.3.2@21578f00e83d4a82ecfa3d50752b609f13de6790',
-  'alionur/oopblog' => 'dev-oopblog@4e9875972178d12c3447731c796edc6481a372da',
+  'alionur/oopblog' => 'dev-oopblog@abef94338e3019cf378bd6163b23467c4f0fc27c',
 );
 
     private function __construct()

@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 
+use App\Service\Admin\CategoryService;
+use App\Service\Admin\PostService;
 use App\Service\Admin\SecurityService;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,10 +28,9 @@ class AdminController extends AbstractController
         if ($this->getRequest()->getMethod() !== Request::METHOD_POST) {
             echo $this->get('twig')->render('register.html.twig');
         }
-        $entityManager = $this->getEntityManager();
         /** @var SecurityService $securityService */
         $securityService = $this->get(SecurityService::class);
-        $securityService->register($this->getRequest(), $entityManager);
+        $securityService->register($this->getRequest());
         return new RedirectResponse("/admin/loginAction");
     }
 
@@ -42,10 +43,10 @@ class AdminController extends AbstractController
             echo $this->get('twig')->render('login.html.twig');
             exit();
         }
-        $entityManager = $this->getEntityManager();
+//        $validator = "email, password";
         /** @var SecurityService $securityService */
         $securityService = $this->get(SecurityService::class);
-        $securityService->login($this->getRequest(), $entityManager);
+        $securityService->login($this->getRequest());
         if (isset($_SESSION['adminName'])) {
             return new RedirectResponse("/admin/dashboard");
         }
@@ -55,13 +56,35 @@ class AdminController extends AbstractController
 
     public function logoutAction()
     {
-        UNSET($_SESSION['adminName']);
+        unset($_SESSION['adminName']);
         return new RedirectResponse("/admin/login");
     }
 
 
     public function addPostAction()
     {
-        echo "asd";
+//        var_dump($request);exit();
+        if ($this->getRequest()->getMethod() !== Request::METHOD_POST) {
+            echo $this->get('twig')->render('addpost.html.twig');
+            exit();
+        }
+
+        $entityManager = $this->getEntityManager();
+        /** @var PostService $postService */
+        $postService = $this->get(PostService::class);
+        $postService->addPost($this->getRequest());
+
+        return new RedirectResponse("/admin/dashboard");
+
+    }
+
+    public function addCategoryAction()
+    {
+//        echo "ali";
+        $entityManager = $this->getEntityManager();
+        /** @var CategoryService $categoryService */
+        $categoryService = $this->get(CategoryService::class);
+        $categoryService->addCategory($this->getRequest());
+        return new RedirectResponse("/admin/dashboard");
     }
 }
