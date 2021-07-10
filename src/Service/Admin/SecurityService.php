@@ -5,27 +5,30 @@ namespace App\Service\Admin;
 use App\Entity\AdminUser;
 use Doctrine\ORM\ORMException;
 use Exception;
-use Symfony\Component\HttpFoundation\Request;
+
 
 class SecurityService extends AbstractService
 {
     /**
-     * @param Request $request
+     * @param $validateName
+     * @param $validateEmail
+     * @param $validateConfirm
+     * @param $validateConfirmPassword
      * @throws Exception
      */
-    public function register(Request $request)
+    public function register($validateName, $validateEmail, $validateConfirm, $validateConfirmPassword)
     {
         $entityManager = $this->getEntityManager();
 //        var_dump($request->request->all());exit();
         $adminUser = new AdminUser();
-        $adminUser->setName($request->request->get("name"));
-        $adminUser->setEmail($request->request->get("email"));
-        $password = $request->request->get("password");
-        $confirmPassword = $request->request->get("confirmPassword");
-        if ($password !== $confirmPassword) {
+        $adminUser->setName($validateName);
+        $adminUser->setEmail($validateEmail);
+//        $password = $validateConfirm;
+//        $confirmPassword = $validateConfirmPassword;
+        if ($validateConfirm !== $validateConfirmPassword) {
             throw new Exception("Şifreler uyuşmuyor");
         }
-        $adminUser->setPassword(sha1($request->request->get("password")));
+        $adminUser->setPassword(sha1($validateConfirm));
         try {
             $entityManager->persist($adminUser);
             $entityManager->flush($adminUser);
@@ -35,21 +38,25 @@ class SecurityService extends AbstractService
     }
 
     /**
-     * @param Request $request
+     * @param $validateEmail
+     * @param $validatePassword
      */
-    public function login(Request $request)
+    public function login($validateEmail, $validatePassword)
     {
+//        var_dump($validateEmail);
+//        var_dump($validatePassword);exit();
         $adminUserRepository = $this->getEntityManager()->getRepository(AdminUser::class);
         /** @var AdminUser $user */
-        $user = $adminUserRepository->findOneBy(["email" => $request->request->get("email")]);
+        $user = $adminUserRepository->findOneBy(["email" => $validateEmail]);
+
         if (!$user) {
-            echo "hatalı";
+            echo "Yanlıs email";
             exit();
         }
-        $password = sha1($request->request->get("password"));
+        $password = sha1($validatePassword);
 
         if ($password !== $user->getPassword()) {
-            echo "Hatalı";
+            echo "Yanlıs parola";
             exit();
         }
         $_SESSION['adminName'] = $user->getName();

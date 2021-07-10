@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block content %}
+{% block dashboard %}
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3 fst-italic" href="/admin/dashboard"><span style="font-family: 'Marketing Script', sans-serif; font-size: 32px;">AdminPanel</span></a>
@@ -92,7 +92,8 @@
                                         </div>
                                         <form action="/admin/add-category" method="post">
                                             <div class="modal-body">
-                                                <input type="text" name="category" required>
+                                                <label for="category">Category</label>
+                                                <input type="text" id="category" name="category" required>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

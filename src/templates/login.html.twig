@@ -12,13 +12,27 @@
                             <div class="card-body">
                                 <form action="/admin/login" method="post">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" name="email" type="email" placeholder="name@example.com" />
+                                        <input class="form-control" id="inputEmail" name="email" placeholder="name@example.com" />
                                         <label for="inputEmail">Email address</label>
                                     </div>
+
+                                    {% if(errors['email'] is not empty) %}
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ errors['email'] ?? '' }}
+                                        </div>
+                                    {% endif %}
+
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="inputPassword" name="password" type="password" placeholder="Password" />
                                         <label for="inputPassword">Password</label>
                                     </div>
+
+                                    {% if(errors['password'] is not empty) %}
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ errors['password'] ?? '' }}
+                                        </div>
+                                    {% endif %}
+
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
                                         <label class="form-check-label" for="inputRememberPassword">Remember Password</label>

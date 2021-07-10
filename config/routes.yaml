@@ -22,6 +22,7 @@
   controller: AdminController
   method: addCategoryAction
 
+
 #/admin/add-category:
 #  controller: AdminController
 #  method:
@@ -35,9 +36,9 @@
 #    method: indexAction
 #
 #
-#/admin/{slug}:
-#    controller: DefaultController
-#    method: viewAction
+#/admin/blog/{slug}:
+#    controller: AdminController
+#    method: ali
 #    params: {
 #      '{slug}': '([0-9a-zA-Z\-]+)'
 #    }

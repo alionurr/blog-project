@@ -2,6 +2,7 @@
 require_once __DIR__ . '/bootstrap.php';
 use App\Framework\Container;
 
+
 $className = "\\App\\Controller\\". $controller;
 if(!class_exists($className)){
     throw new \Exception("Bulunamadı");

@@ -19,24 +19,47 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {% if(errors['name'] is not empty) %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ errors['name'] ?? '' }}
+                                            </div>
+                                        {% endif %}
+
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
+                                            <input class="form-control" name="email" id="inputEmail" placeholder="name@example.com" />
                                             <label for="inputEmail">Email address</label>
                                         </div>
+                                        {% if(errors['email'] is not empty) %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ errors['email'] ?? '' }}
+                                            </div>
+                                        {% endif %}
+
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating mb-3 mb-md-0">
                                                     <input class="form-control" name="password" id="inputPassword" type="password" placeholder="Create a password" />
                                                     <label for="inputPassword">Password</label>
                                                 </div>
+                                                {% if(errors['password'] is not empty) %}
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{ errors['password'] ?? '' }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating mb-3 mb-md-0">
                                                     <input class="form-control" name="confirmPassword" id="inputPasswordConfirm" type="password" placeholder="Confirm password" />
                                                     <label for="inputPasswordConfirm">Confirm Password</label>
                                                 </div>
+                                                {% if(errors['confirmPassword'] is not empty) %}
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{ errors['confirmPassword'] ?? '' }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
+
                                         <div class="mt-4 mb-0">
                                             <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Create Account</button></div>
                                         </div>
