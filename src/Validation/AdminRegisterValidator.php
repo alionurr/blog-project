@@ -78,7 +78,7 @@ class AdminRegisterValidator
         if (empty($this->password)){
             $this->addError('password', 'parolanızı giriniz');
         } else{
-            if (!preg_match('/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{8,}$/', $this->password)){
+            if (!preg_match('/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{4,}$/', $this->password)){
                 $this->addError('password', 'parolanız en az bir büyük harf, bir küçük harf ve sayı içermelidir.');
             }
         }
@@ -92,7 +92,7 @@ class AdminRegisterValidator
         if (empty($this->confirmPassword)){
             $this->addError('confirmPassword', 'parolanızı giriniz');
         } else{
-            if (!preg_match('/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{8,}$/', $this->confirmPassword)){
+            if (!preg_match('/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{4,}$/', $this->confirmPassword)){
                 $this->addError('confirmPassword', 'parolanız en az bir büyük harf, bir küçük harf ve sayı içermelidir.');
             }
         }

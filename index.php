@@ -15,11 +15,22 @@ $container->register('twig', $twig);
 $securityService = new \App\Service\Admin\SecurityService($entityManager);
 $container->register(\App\Service\Admin\SecurityService::class, $securityService);
 
-$postService = new \App\Service\Admin\PostService($entityManager);
-$container->register(\App\Service\Admin\PostService::class,$postService);
+$blogCreatorService = new \App\Service\Admin\CRUD\Creator\BlogCreator($entityManager);
+$container->register(\App\Service\Admin\CRUD\Creator\BlogCreator::class, $blogCreatorService);
 
-$categoryService = new \App\Service\Admin\CategoryService($entityManager);
-$container->register(\App\Service\Admin\CategoryService::class,$categoryService);
+$categoryCreatorService = new \App\Service\Admin\CRUD\Creator\CategoryCreator($entityManager);
+$container->register(\App\Service\Admin\CRUD\Creator\CategoryCreator::class,$categoryCreatorService);
+
+$blogDeleterService = new \App\Service\Admin\CRUD\Deleter\BlogDeleter($entityManager);
+$container->register(\App\Service\Admin\CRUD\Deleter\BlogDeleter::class, $blogDeleterService);
+
+$blogFetcherService = new \App\Service\Admin\CRUD\Fetcher\BlogFetcher($entityManager);
+$container->register(\App\Service\Admin\CRUD\Fetcher\BlogFetcher::class, $blogFetcherService);
+
+$categoryFetcherService = new \App\Service\Admin\CRUD\Fetcher\CategoryFetcher($entityManager);
+$container->register(\App\Service\Admin\CRUD\Fetcher\CategoryFetcher::class, $categoryFetcherService);
+
+
 
 try{
     $class = new $className($container);

@@ -14,14 +14,31 @@
   controller: AdminController
   method: logoutAction
 
-/admin/add-post:
+/admin/add-blog:
   controller: AdminController
-  method: addPostAction
+  method: addBlogAction
 
 /admin/add-category:
   controller: AdminController
   method: addCategoryAction
 
+/admin/blog-list:
+  controller: AdminController
+  method: getBlogAction
+
+/admin/blog-delete/{id}:
+  controller: AdminController
+  method: deleteBlogAction
+  params: {
+    '{id}': (\d+)
+  }
+
+/admin/blog-detail/{id}:
+  controller: AdminController
+  method: blogDetailAction
+  params: {
+      '{id}': (\d+)
+  }
 
 #/admin/add-category:
 #  controller: AdminController

@@ -21,8 +21,8 @@ class TwigService
     public function getName() {
         if (isset($_SESSION['adminName'])):
             echo $_SESSION['adminName'];
-        else:
-            echo "logout";
+//        else:
+//            echo "logout";
         endif;
     }
 }

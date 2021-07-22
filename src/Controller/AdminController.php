@@ -4,8 +4,14 @@
 namespace App\Controller;
 
 
+use App\Entity\Blog;
 use App\Service\Admin\CategoryService;
-use App\Service\Admin\PostService;
+use App\Service\Admin\CRUD\Creator\BlogCreator;
+use App\Service\Admin\CRUD\Creator\CategoryCreator;
+use App\Service\Admin\CRUD\Deleter\BlogDeleter;
+use App\Service\Admin\BlogService;
+use App\Service\Admin\CRUD\Fetcher\BlogFetcher;
+use App\Service\Admin\CRUD\Fetcher\CategoryFetcher;
 use App\Service\Admin\SecurityService;
 use App\Validation\AdminLoginValidator;
 use App\Validation\AdminRegisterValidator;
@@ -96,18 +102,21 @@ class AdminController extends AbstractController
     /**
      * @return RedirectResponse
      */
-    public function addPostAction(): RedirectResponse
+    public function addBlogAction(): RedirectResponse
     {
 //        var_dump($request);exit();
         if ($this->getRequest()->getMethod() !== Request::METHOD_POST) {
-            echo $this->get('twig')->render('addpost.html.twig');
+            /** @var CategoryFetcher $categoryFetcher */
+            $categoryFetcher = $this->get(CategoryFetcher::class);
+            $categories = $categoryFetcher->fetch();
+            echo $this->get('twig')->render('addblog.html.twig', ['categories' => $categories]);
             exit();
         }
 
-        /** @var PostService $postService */
-        $postService = $this->get(PostService::class);
-        $postService->addPost($this->getRequest());
-
+        /** @var BlogCreator $blogCreator */
+        $blogCreator = $this->get(BlogCreator::class);
+//        var_dump($this->getRequest()->request->get('categories'));exit();
+        $blogCreator->create($this->getRequest());
         return new RedirectResponse("/admin/dashboard");
 
     }
@@ -117,11 +126,34 @@ class AdminController extends AbstractController
      */
     public function addCategoryAction(): ?RedirectResponse
     {
-
-        /** @var CategoryService $categoryService */
-        $categoryService = $this->get(CategoryService::class);
-        $categoryService->addCategory($this->getRequest());
+        /** @var CategoryCreator $categoryService */
+        $categoryService = $this->get(CategoryCreator::class);
+        $categoryService->create($this->getRequest());
         return new RedirectResponse("/admin/dashboard");
     }
 
+
+    public function getBlogAction()
+    {
+        /** @var BlogFetcher $blogFetcher */
+        $blogFetcher = $this->get(BlogFetcher::class);
+        $blogFetcher->fetch();
+    }
+
+    public function deleteBlogAction($id)
+    {
+        /** @var BlogDeleter $blogDeleter */
+        $blogDeleter = $this->get(BlogDeleter::class);
+        $blogDeleter->delete($id);
+
+    }
+
+    public function blogDetailAction($id)
+    {
+        /** @var BlogFetcher $blogFetcherById */
+        $blogFetcherById = $this->get(BlogFetcher::class);
+        $blog = $blogFetcherById->fetchById($id);
+//        var_dump($blog);exit();
+        return $this->get('twig')->render('detail.html.twig', ['blog' => $blog]);
+    }
 }

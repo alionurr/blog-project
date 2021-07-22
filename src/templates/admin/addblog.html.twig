@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block addpost %}
+{% block content %}
 
     <div class="container">
-        <form class="mt-5" action="/admin/add-post" method="post">
+        <form class="mt-5" action="/admin/add-blog" method="post">
             <div class="form-group mt-3">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" name="title" id="title" placeholder="Title">
@@ -16,7 +16,9 @@
             <div class="my-3">
                 <label for="category">Category</label>
                 <select id="category" class="js-example-basic-multiple" style="width: 100%" name="categories[]" multiple="multiple">
-                    <option value="AL">Alabama</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

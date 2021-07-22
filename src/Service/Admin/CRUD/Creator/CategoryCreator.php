@@ -1,20 +1,22 @@
 <?php
 
 
-namespace App\Service\Admin;
+namespace App\Service\Admin\CRUD\Creator;
 
-require_once __DIR__.'/../../../Slugger.php';
+require_once __DIR__.'/../../../../../Slugger.php';
 
 use App\Entity\Category;
+use App\Service\Admin\AbstractService;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 
-class CategoryService extends AbstractService
+
+class CategoryCreator extends AbstractService
 {
     /**
      * @param Request $request
      */
-    public function addCategory(Request $request)
+    public function create(Request $request)
     {
         $entityManager = $this->getEntityManager();
 //        var_dump($request->request->all());
@@ -29,5 +31,4 @@ class CategoryService extends AbstractService
             echo $e->getMessage();exit();
         }
     }
-
 }

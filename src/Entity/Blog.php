@@ -4,6 +4,7 @@ namespace App\Entity;
 
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,6 +51,40 @@ class Blog
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     private $status;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class)
+     * @ORM\JoinTable(
+     *  name="blog_to_category",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *  }
+     *  )
+     *
+     */
+    private $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -163,19 +198,47 @@ class Blog
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    private $createdAt;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    private $updatedAt;
+    public function getCategories()
+    {
+        return $this->categories;
+    }
 
+    public function addCategory(Category $category)
+    {
+        if (!$this->categories->contains($category))
+        {
+            $this->categories->add($category);
+        }
+    }
+
+    public function removeCategory(Category $category)
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+//    /**
+//     * @param mixed $categories
+//     */
+//    public function setCategories($categories): void
+//    {
+//        $this->categories = $categories;
+//    }
+//
+//    public function addCategory(Category $category)
+//    {
+//        if (!in_array($category, $this->categories))
+//        {
+//            $this->categories[$category->getId()] = ($category);
+//        }
+//
+//    }
+//
+//    public function removeCategory(Category $category)
+//    {
+//        unset($this->categories[$category->getId()]);
+//    }
 
 }

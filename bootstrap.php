@@ -27,7 +27,7 @@ $conn = Yaml::parse(file_get_contents('config/doctrine.yaml'));
 // obtaining the entity manager
 $entityManager = EntityManager::create($conn, $config);
 
-$loader = new FilesystemLoader(__DIR__.'/src/templates');
+$loader = new FilesystemLoader(__DIR__.'/src/templates/admin');
 $twig = new Environment($loader);
 
 $getName = new TwigFunction('getName', function (){
@@ -44,3 +44,7 @@ $twig->addFunction($getName);
 
 
 $request = Request::createFromGlobals();
+
+// security sınıfının methodu çağırılmalı
+//$securityHandler = new \App\Framework\SecurityHandler();
+//$securityHandler->run($request);

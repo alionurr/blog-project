@@ -1,0 +1,14 @@
+security:
+
+  firewalls:
+    storefront:
+      login: /login
+      logout: /logout
+    admin:
+      login: /admin/login
+      logout: /admin/logout
+
+
+  access_control:
+    - { path: ^/admin/login, roles: ROLE_ANONYMOUS, fallback: /admin/dashboard }
+    - { path: ^/admin/.*, roles: ROLE_ADMIN, fallback: /admin/login }
