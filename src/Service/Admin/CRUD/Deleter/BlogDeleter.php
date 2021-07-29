@@ -3,7 +3,7 @@
 namespace App\Service\Admin\CRUD\Deleter;
 
 use App\Entity\Blog;
-use App\Service\Admin\AbstractService;
+use App\Service\AbstractService;
 use Doctrine\ORM\EntityManager;
 
 class BlogDeleter extends AbstractService
@@ -16,7 +16,7 @@ class BlogDeleter extends AbstractService
 //        var_dump($blog);exit();
         if($blog){
             $entityManager->remove($blog);
-            $entityManager->flush();
+            $entityManager->flush($blog);
         }
     }
 }

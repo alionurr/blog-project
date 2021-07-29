@@ -17,7 +17,7 @@ foreach ($routes as $route => $rule){
         $ruleParamsValues = array_values($ruleParams);
         $route = str_replace($ruleParamsKeys, $ruleParamsValues, $route);
     }
-    $pattern = "/".str_replace("/", "\/", $route)."$/";
+    $pattern = "/^".str_replace("/", "\/", $route)."$/";
     preg_match($pattern, $requestUri, $matches);
     if(!empty($matches)){
         $controller = $rule["controller"];

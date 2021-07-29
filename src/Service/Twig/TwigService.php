@@ -14,8 +14,11 @@ class TwigService
         $this->twig = $twig;
 
         $getName = new TwigFunction('getName');
-
         $twig->addFunction($getName);
+
+        $inArray = new TwigFunction('inArray');
+        $twig->addFunction($inArray);
+
     }
 
     public function getName() {
@@ -24,5 +27,10 @@ class TwigService
 //        else:
 //            echo "logout";
         endif;
+    }
+
+    public function inArray($needle, $haystack): bool
+    {
+        return in_array($needle, $haystack);
     }
 }

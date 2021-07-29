@@ -1,44 +1,79 @@
+/:
+  controller: App\Controller\Storefront\BlogController
+  method: index
+
+/blog-detail/{id}:
+  controller: App\Controller\Storefront\BlogController
+  method: detailAction
+  params: {
+      '{id}': (\d+)
+  }
+
+/category/{slug}:
+  controller: App\Controller\Storefront\CategoryController
+  method: getAction
+  params: {
+      '{slug}': ([0-9a-zA-Z\-]+)
+  }
+
+/search-results:
+  controller: App\Controller\Storefront\BlogController
+  method: searchAction
+
+
+
 /admin/dashboard:
-  controller: AdminController
+  controller: App\Controller\Admin\AdminController
   method: indexAction
 
 /admin/sign-up:
-  controller: AdminController
+  controller: App\Controller\Admin\AdminController
   method: signUpAction
 
 /admin/login:
-  controller: AdminController
+  controller: App\Controller\Admin\AdminController
   method: loginAction
 
 /admin/logout:
-  controller: AdminController
+  controller: App\Controller\Admin\AdminController
   method: logoutAction
 
 /admin/add-blog:
-  controller: AdminController
-  method: addBlogAction
+  controller: App\Controller\Admin\BlogController
+  method: addAction
 
 /admin/add-category:
-  controller: AdminController
-  method: addCategoryAction
+  controller: App\Controller\Admin\CategoryController
+  method: addAction
 
 /admin/blog-list:
-  controller: AdminController
-  method: getBlogAction
+  controller: App\Controller\Admin\BlogController
+  method: getAction
 
 /admin/blog-delete/{id}:
-  controller: AdminController
-  method: deleteBlogAction
+  controller: App\Controller\Admin\BlogController
+  method: deleteAction
   params: {
     '{id}': (\d+)
   }
 
 /admin/blog-detail/{id}:
-  controller: AdminController
-  method: blogDetailAction
+  controller: App\Controller\Admin\BlogController
+  method: detailAction
   params: {
       '{id}': (\d+)
   }
+
+/admin/blog-update/{id}:
+  controller: App\Controller\Admin\BlogController
+  method: updateAction
+  params: {
+      '{id}':(\d+)
+  }
+
+
+
+
 
 #/admin/add-category:
 #  controller: AdminController

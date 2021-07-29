@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block content %}
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -19,11 +19,13 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">{{ getName() }}</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <form action="/admin/logout" method="post">
-                        <li><button class="dropdown-item" name="logout" type="submit">Logout</button></li>
-                    </form>
+                    {% if session is defined %}
+                        <li><a class="dropdown-item text-uppercase" href="#!">{{ session.adminName }}</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <form action="/admin/logout" method="post">
+                            <li><button class="dropdown-item" name="logout" type="submit">Logout</button></li>
+                        </form>
+                    {% endif %}
                 </ul>
             </li>
         </ul>

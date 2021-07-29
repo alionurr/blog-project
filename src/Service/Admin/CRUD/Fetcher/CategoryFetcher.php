@@ -5,7 +5,7 @@ namespace App\Service\Admin\CRUD\Fetcher;
 
 
 use App\Entity\Category;
-use App\Service\Admin\AbstractService;
+use App\Service\AbstractService;
 
 class CategoryFetcher extends AbstractService
 {

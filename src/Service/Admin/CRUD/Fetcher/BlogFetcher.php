@@ -3,7 +3,7 @@
 namespace App\Service\Admin\CRUD\Fetcher;
 
 use App\Entity\Blog;
-use App\Service\Admin\AbstractService;
+use App\Service\AbstractService;
 use Doctrine\ORM\EntityManager;
 
 class BlogFetcher extends AbstractService

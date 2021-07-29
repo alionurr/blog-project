@@ -1,0 +1,27 @@
+{% extends 'storefront/base.html.twig' %}
+{% block content %}
+
+    <div class="container">
+
+        <h1> Sitede aradığınız anahtar kelime "<span>{{ searchValue }}</span>"</h1>
+
+        {% if results is empty %}
+            <div class="alert alert-danger mt-3">Sonuç bulunamadı.</div>
+        {% endif %}
+        {% for result in results %}
+            <div class="col-lg-8">
+                <div class="card my-4">
+                    <div class="card-body">
+                        <div class="small text-muted"><span>{{ result.createdAt|date('d M Y') }}</span> at <span>{{ result.createdAt|date('H:i') }}</span></div>
+                        <h2 class="card-title">{{ result.title }}</h2>
+                        <p class="card-text">{{ result.content[:200] }}...</p>
+                        <a class="btn btn-primary" href="/blog-detail/{{ result.id }}">Read more →</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
+

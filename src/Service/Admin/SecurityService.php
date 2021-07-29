@@ -3,6 +3,7 @@
 namespace App\Service\Admin;
 
 use App\Entity\AdminUser;
+use App\Service\AbstractService;
 use Doctrine\ORM\ORMException;
 use Exception;
 

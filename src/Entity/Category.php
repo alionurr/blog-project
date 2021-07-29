@@ -36,6 +36,22 @@ class Category
     private $name;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Blog::class)
+     * @ORM\JoinTable(
+     *  name="blog_to_category",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     *  }
+     *  )
+     *
+     */
+    private $blogs;
+
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -81,6 +97,14 @@ class Category
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBlogs()
+    {
+        return $this->blogs;
     }
 
 

@@ -4,7 +4,7 @@ namespace App\Service\Admin\CRUD\Creator;
 
 use App\Entity\Blog;
 use App\Entity\Category;
-use App\Service\Admin\AbstractService;
+use App\Service\AbstractService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;

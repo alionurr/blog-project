@@ -3,9 +3,7 @@
 
 namespace App\Controller;
 
-
 use App\Framework\Container;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractController

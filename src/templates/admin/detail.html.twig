@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block content %}
 
@@ -12,5 +12,6 @@
 {#        <a href="/admin/post-delete/{{ blog.id }}" class="btn btn-danger">Delete</a>#}
     </div>
 
+    <a href="/admin/blog-update/{{ blog.id }}">Update</a>
 
 {% endblock %}

@@ -27,20 +27,16 @@ $conn = Yaml::parse(file_get_contents('config/doctrine.yaml'));
 // obtaining the entity manager
 $entityManager = EntityManager::create($conn, $config);
 
-$loader = new FilesystemLoader(__DIR__.'/src/templates/admin');
+$loader = new FilesystemLoader(__DIR__.'/src/templates');
 $twig = new Environment($loader);
 
-$getName = new TwigFunction('getName', function (){
-    if (isset($_SESSION['adminName'])):
-        echo $_SESSION['adminName'];
-    else:
-        echo "logout";
-    endif;
+$twig->addGlobal('session', $_SESSION);
+
+$inArray = new TwigFunction('inArray', function ($needle, $haystack){
+   return in_array($needle, $haystack);
 });
+$twig->addFunction($inArray);
 
-$twig->addFunction($getName);
-
-//new \App\Service\Twig\TwigService($twig);
 
 
 $request = Request::createFromGlobals();

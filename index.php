@@ -3,7 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 use App\Framework\Container;
 
 
-$className = "\\App\\Controller\\". $controller;
+$className = $controller;
 if(!class_exists($className)){
     throw new \Exception("Bulunamadı");
 }
@@ -30,6 +30,11 @@ $container->register(\App\Service\Admin\CRUD\Fetcher\BlogFetcher::class, $blogFe
 $categoryFetcherService = new \App\Service\Admin\CRUD\Fetcher\CategoryFetcher($entityManager);
 $container->register(\App\Service\Admin\CRUD\Fetcher\CategoryFetcher::class, $categoryFetcherService);
 
+$blogUpdaterService = new \App\Service\Admin\CRUD\Updater\BlogUpdater($entityManager);
+$container->register(\App\Service\Admin\CRUD\Updater\BlogUpdater::class, $blogUpdaterService);
+
+$blogSearchService = new \App\Service\Search\BlogSearchService($entityManager);
+$container->register(\App\Service\Search\BlogSearchService::class, $blogSearchService);
 
 
 try{

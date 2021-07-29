@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Blog
  *
  * @ORM\Table(name="blog")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\BlogRepository")
  */
 class Blog
 {
@@ -199,11 +199,15 @@ class Blog
     }
 
 
+
     public function getCategories()
     {
         return $this->categories;
     }
 
+    /**
+     * @param Category $category
+     */
     public function addCategory(Category $category)
     {
         if (!$this->categories->contains($category))
@@ -212,6 +216,10 @@ class Blog
         }
     }
 
+    /**
+     * @param Category $category
+     * @return $this
+     */
     public function removeCategory(Category $category)
     {
         $this->categories->removeElement($category);
