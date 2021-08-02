@@ -4,8 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Service\Admin\SecurityService;
-use App\Validation\AdminLoginValidator;
-use App\Validation\AdminRegisterValidator;
+use App\Validation\LoginValidator;
+use App\Validation\RegisterValidator;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,7 @@ class AdminController extends AbstractController
             echo $this->get('twig')->render('admin/register.html.twig', ['errors' => $errorParameters]);
         }
 
-        $validator = new AdminRegisterValidator($this->getRequest());
+        $validator = new RegisterValidator($this->getRequest());
         $validator->validateForRegister();
         if (!empty($validator->errors)){
             $_SESSION['errors'] = $validator->errors;
@@ -64,7 +64,7 @@ class AdminController extends AbstractController
             echo $this->get('twig')->render('admin/login.html.twig', ['errors' => $errorParameters]);
             exit();
         }
-        $validator = new AdminLoginValidator($this->getRequest());
+        $validator = new LoginValidator($this->getRequest());
         $validator->validateForLogin();
         if (!empty($validator->errors)) {
             $_SESSION['errors'] = $validator->errors;

@@ -5,10 +5,10 @@ namespace App\Validation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AdminLoginValidator
+ * Class LoginValidator
  * @package App\Validation
  */
-class AdminLoginValidator
+class LoginValidator
 {
     private $data;
     public $errors = [];
@@ -17,7 +17,7 @@ class AdminLoginValidator
     private static $fields = ["email", "password"];
 
     /**
-     * AdminLoginValidator constructor.
+     * LoginValidator constructor.
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -46,7 +46,7 @@ class AdminLoginValidator
     {
         $this->email = trim($this->data['email']);
 
-        if (empty($this->email )){
+        if (empty($this->email)){
             $this->addError('email', 'lütfen bir email giriniz');
         } else{
             if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)){

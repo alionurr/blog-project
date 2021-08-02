@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * Class AdminRegisterValidator
+ * Class RegisterValidator
  * @package App\Validation
  */
-class AdminRegisterValidator
+class RegisterValidator
 {
     private $data;
     public $errors=[];
@@ -23,7 +23,7 @@ class AdminRegisterValidator
 
 
     /**
-     * AdminRegisterValidator constructor.
+     * RegisterValidator constructor.
      * @param Request $request
      */
     public function __construct(Request $request)

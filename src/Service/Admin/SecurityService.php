@@ -27,7 +27,7 @@ class SecurityService extends AbstractService
 //        $password = $validateConfirm;
 //        $confirmPassword = $validateConfirmPassword;
         if ($validateConfirm !== $validateConfirmPassword) {
-            throw new Exception("Şifreler uyuşmuyor");
+            throw new Exception("Parolalar uyuşmuyor");
         }
         $adminUser->setPassword(sha1($validateConfirm));
         try {

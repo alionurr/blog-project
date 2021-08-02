@@ -12,8 +12,8 @@ $container->register('request', $request);
 $container->register('entity_manager', $entityManager);
 $container->register('twig', $twig);
 
-$securityService = new \App\Service\Admin\SecurityService($entityManager);
-$container->register(\App\Service\Admin\SecurityService::class, $securityService);
+$adminSecurityService = new \App\Service\Admin\SecurityService($entityManager);
+$container->register(\App\Service\Admin\SecurityService::class, $adminSecurityService);
 
 $blogCreatorService = new \App\Service\Admin\CRUD\Creator\BlogCreator($entityManager);
 $container->register(\App\Service\Admin\CRUD\Creator\BlogCreator::class, $blogCreatorService);
@@ -33,8 +33,11 @@ $container->register(\App\Service\Admin\CRUD\Fetcher\CategoryFetcher::class, $ca
 $blogUpdaterService = new \App\Service\Admin\CRUD\Updater\BlogUpdater($entityManager);
 $container->register(\App\Service\Admin\CRUD\Updater\BlogUpdater::class, $blogUpdaterService);
 
-$blogSearchService = new \App\Service\Search\BlogSearchService($entityManager);
-$container->register(\App\Service\Search\BlogSearchService::class, $blogSearchService);
+$blogSearchService = new \App\Service\Storefront\BlogSearchService($entityManager);
+$container->register(\App\Service\Storefront\BlogSearchService::class, $blogSearchService);
+
+$securityService = new \App\Service\Storefront\SecurityService($entityManager);
+$container->register(\App\Service\Storefront\SecurityService::class, $securityService);
 
 
 try{

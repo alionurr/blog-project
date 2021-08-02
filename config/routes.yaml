@@ -9,6 +9,18 @@
       '{id}': (\d+)
   }
 
+/login:
+  controller: App\Controller\Storefront\AdminController
+  method: loginAction
+
+/logout:
+  controller: App\Controller\Storefront\AdminController
+  method: logoutAction
+
+/sign-up:
+  controller: App\Controller\Storefront\AdminController
+  method: signUpAction
+
 /category/{slug}:
   controller: App\Controller\Storefront\CategoryController
   method: getAction

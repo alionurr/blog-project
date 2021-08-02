@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Search;
+namespace App\Service\Storefront;
 
 use App\Entity\Blog;
 use App\Service\AbstractService;
@@ -10,6 +10,7 @@ class BlogSearchService extends AbstractService
 {
     /**
      * @param $value
+     * @return mixed
      */
     public function search($value)
     {

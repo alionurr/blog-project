@@ -35,6 +35,10 @@ $twig->addGlobal('session', $_SESSION);
 $inArray = new TwigFunction('inArray', function ($needle, $haystack){
    return in_array($needle, $haystack);
 });
+$varDumper = new TwigFunction('varDump', function ($value){
+    var_dump($value);
+});
+$twig->addFunction($varDumper);
 $twig->addFunction($inArray);
 
 
