@@ -81,9 +81,15 @@ class Blog
      */
     private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -199,7 +205,6 @@ class Blog
     }
 
 
-
     public function getCategories()
     {
         return $this->categories;
@@ -226,6 +231,15 @@ class Blog
 
         return $this;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
 
 //    /**
 //     * @param mixed $categories

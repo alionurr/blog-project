@@ -32,7 +32,12 @@
   controller: App\Controller\Storefront\BlogController
   method: searchAction
 
-
+/blog/{id}/add-comment:
+  controller: App\Controller\Storefront\CommentController
+  method: addCommentAction
+  params: {
+    '{id}': (\d+)
+  }
 
 /admin/dashboard:
   controller: App\Controller\Admin\AdminController

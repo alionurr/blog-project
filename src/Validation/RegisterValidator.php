@@ -90,10 +90,10 @@ class RegisterValidator
         $this->confirmPassword = trim($this->data['confirmPassword']);
 
         if (empty($this->confirmPassword)){
-            $this->addError('confirmPassword', 'parolanızı giriniz');
+            $this->addError('password', 'parolanızı giriniz');
         } else{
             if (!preg_match('/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{4,}$/', $this->confirmPassword)){
-                $this->addError('confirmPassword', 'parolanız en az bir büyük harf, bir küçük harf ve sayı içermelidir.');
+                $this->addError('password', 'parolanız en az bir büyük harf, bir küçük harf ve sayı içermelidir.');
             }
         }
         return $this->confirmPassword;

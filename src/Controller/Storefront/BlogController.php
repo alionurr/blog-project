@@ -5,7 +5,7 @@ namespace App\Controller\Storefront;
 use App\Controller\AbstractController;
 use App\Entity\Blog;
 use App\Entity\Category;
-use App\Service\Search\BlogSearchService;
+use App\Service\Storefront\BlogSearchService;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -50,4 +50,6 @@ class BlogController extends AbstractController
 
         echo $this->get('twig')->render('storefront/search.html.twig', ['results' => $searchResults, 'searchValue' => $searchValue]);
     }
+
+
 }

@@ -39,6 +39,9 @@ $container->register(\App\Service\Storefront\BlogSearchService::class, $blogSear
 $securityService = new \App\Service\Storefront\SecurityService($entityManager);
 $container->register(\App\Service\Storefront\SecurityService::class, $securityService);
 
+$commentService = new \App\Service\Storefront\CommentService($entityManager);
+$container->register(\App\Service\Storefront\CommentService::class, $commentService);
+
 
 try{
     $class = new $className($container);
