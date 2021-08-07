@@ -36,24 +36,35 @@
                 <!-- Comment section-->
                 <section class="mb-5">
 
-                    <div id="commentListArea">
+                    <div id="commentListArea" class="card p-3 mb-3">
                         {% for comment in blog.comments %}
-                            <div class="d-flex"> <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."/></div><div class="ms-3"> <div class="fw-bold">
-                                {{ comment.username }}</div>{{ comment.content }}</div></div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."/>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">
+                                        {{ comment.username }} - {{ comment.createdAt|date('y-m-d') }}
+                                    </div>
+                                    <div class="text-break">
+                                        {{ comment.content }}
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
 
-                    <div class="card bg-light">
-                        <div class="card-body">
+                    {% if session is defined and session.userName %}
+                        <div class="card bg-light">
+                            <div class="card-body">
                             <!-- Comment form-->
-                            {% if session is defined and session.userName %}
                                 <label for="comment">Comments</label>
                                 <textarea class="form-control" rows="3" id="comment" placeholder="Join the discussion and leave a comment!"></textarea>
                                 <button class="btn btn-success mt-2" style="float: right" id="saveComment" onclick="saveComment();">Share</button>
-
-                            {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
+
                 </section>
             </div>
             <!-- Side widgets-->

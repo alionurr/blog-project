@@ -15,8 +15,11 @@ class CommentController extends AbstractController
 
         /** @var CommentService $commentService */
         $commentService = $this->get(CommentService::class);
-        $commentService->addComment($id,$comment, $username);
+        $data = $commentService->addComment($id,$comment, $username);
 
-        echo json_encode(['status' => 'success']);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $data,
+        ]);
     }
 }

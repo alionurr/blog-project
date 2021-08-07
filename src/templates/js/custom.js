@@ -66,7 +66,6 @@ function saveComment (){
     let comment = $('#comment').val();
     let blogId = $('#blogId').val();
     let username = $('#username').val();
-    // console.log(blogId);
     if (comment !== "") {
         // console.log(comment);
         // console.log('/blog/'+blogId+'/add-comment');
@@ -82,7 +81,16 @@ function saveComment (){
                 $('#comment').val('');
                 var result = JSON.parse(result);
                 if(result.status === 'success'){
-                    const commentTemplate = '<div class="d-flex"> <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."/></div><div class="ms-3"> <div class="fw-bold">'+username+'</div>'+comment+'</div></div>';
+                    const commentTemplate =
+                        '<div class="d-flex mb-3">' +
+                            '<div class="flex-shrink-0">' +
+                                '<img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."/>' +
+                            '</div>' +
+                            '<div class="ms-3">' +
+                                '<div class="fw-bold">'+ username + " - " + result.data.createdAt + '</div>' +
+                                '<div class="text-break">'+comment+'</div>' +
+                            '</div>' +
+                        '</div>';
                     jQuery("#commentListArea").append(commentTemplate);
                 }
             },

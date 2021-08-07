@@ -26,6 +26,8 @@ class CommentService extends AbstractService
         try {
             $entityManager->persist($comment);
             $entityManager->flush($comment);
+
+            return $comment;
         } catch (ORMException $e) {
             echo $e->getMessage();exit();
         }
