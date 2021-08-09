@@ -14,13 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment implements \JsonSerializable
 {
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),
             'content' => $this->getContent(),
             'username' => $this->getUsername(),
-            'createdAt' => $this->getCreatedAt()->format("y-m-d"),
+            'createdAt' => $this->getCreatedAt()->format("d-m-Y H:i"),
         ];
     }
 
